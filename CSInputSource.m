@@ -11,97 +11,62 @@
 
 @implementation CSInputSource
 
-- (id) initWithInputSource: (TISInputSourceRef) ref
-{
-  if (self = [super init]) {    
+- (id) initWithInputSource: (TISInputSourceRef) ref {
+  if (self = [super init]) {
     mInputSource = ref;
-    
-    CFRetain(mInputSource);
   }
-  
+
   return self;
 }
 
-+ (CSInputSource *) fromInputSource: (TISInputSourceRef) ref
-{
++ (CSInputSource *) fromInputSource: (TISInputSourceRef) ref {
   return [[CSInputSource alloc] initWithInputSource: ref];
 }
 
 #pragma mark Public
 
-+ (NSArray *) all
-{
++ (NSArray *) all {
   return [self withProperties: nil];
 }
 
-+ (NSArray *) withProperties: (NSDictionary *) properties
-{
-  NSArray * inputs = (NSArray *)TISCreateInputSourceList((CFDictionaryRef)properties, false);
-  
++ (NSArray *) withProperties: (NSDictionary *) properties {
+  NSArray * inputs = CFBridgingRelease(TISCreateInputSourceList((__bridge CFDictionaryRef)properties, false));
+
   NSMutableArray * result = [NSMutableArray arrayWithCapacity: [inputs count]];
-  
-  for (id ref in inputs) {
-    [result addObject: [CSInputSource fromInputSource: (TISInputSourceRef)ref]];
-  }
-  
-  CFMakeCollectable(inputs);
-  
+
+	for (CFIndex i = 0; i < [inputs count]; i++) {
+		[result addObject: [CSInputSource fromInputSource: (TISInputSourceRef)CFRetain((TISInputSourceRef)inputs[i])]];
+	}
+
   return result;
 }
 
-+ (CSInputSource *) forLanguage: (NSString *) language
-{
-  TISInputSourceRef ref = TISCopyInputSourceForLanguage((CFStringRef)language);
-  
-  CSInputSource * result = [CSInputSource fromInputSource: ref];
-  
-  CFMakeCollectable(ref);
-  
-  return result;
++ (CSInputSource *) forLanguage: (NSString *) language {
+  return [CSInputSource fromInputSource: TISCopyInputSourceForLanguage((__bridge CFStringRef)language)];
 }
 
-+ (CSInputSource *) currentKeyboard
-{
-  TISInputSourceRef ref = TISCopyCurrentKeyboardInputSource();
-  
-  CSInputSource * result = [CSInputSource fromInputSource: ref];
-  
-  CFMakeCollectable(ref);
-  
-  return result;
++ (CSInputSource *) currentKeyboard {
+  return [CSInputSource fromInputSource: TISCopyCurrentKeyboardInputSource()];
 }
 
-+ (CSInputSource *) currentKeyboardLayout
-{
-  TISInputSourceRef ref = TISCopyCurrentKeyboardLayoutInputSource();
-  
-  CSInputSource * result = [CSInputSource fromInputSource: ref];
-  
-  CFMakeCollectable(ref);
-  
-  return result;
++ (CSInputSource *) currentKeyboardLayout {
+  return [CSInputSource fromInputSource: TISCopyCurrentKeyboardLayoutInputSource()];
 }
 
-- (void *) getProperty: (NSString *) key
-{
-  return TISGetInputSourceProperty((TISInputSourceRef)mInputSource, (CFStringRef)key);
+- (void *) getProperty: (CFStringRef) key {
+  return TISGetInputSourceProperty((TISInputSourceRef)mInputSource, key);
 }
 
-- (NSString *) localizedName
-{
-  return (NSString *)[self getProperty: (NSString *)kTISPropertyLocalizedName];
+- (NSString *) localizedName {
+  return (NSString *)[self getProperty: kTISPropertyLocalizedName];
 }
 
-- (NSError *) select
-{
+- (NSError *) select {
   return [NSError errorWithDomain: NSOSStatusErrorDomain code: TISSelectInputSource((TISInputSourceRef)mInputSource) userInfo: nil];
 }
 
-- (void) finalize
-{
-  CFMakeCollectable(mInputSource);
-  
-  [super finalize];
+- (void) dealloc {
+	CFRelease((TISInputSourceRef)mInputSource);
 }
 
 @end

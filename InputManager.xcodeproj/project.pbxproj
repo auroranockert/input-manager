@@ -148,9 +148,15 @@
 /* Begin PBXProject section */
 		0867D690FE84028FC02AAC07 /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+			};
 			buildConfigurationList = 1DEB91B108733DA50010E9CD /* Build configuration list for PBXProject "InputManager" */;
 			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				en,
+			);
 			mainGroup = 0867D691FE84028FC02AAC07 /* InputManager */;
 			productRefGroup = 034768DFFF38A50411DB9C8B /* Products */;
 			projectDirPath = "";
@@ -187,12 +193,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
 				COPY_PHASE_STRIP = NO;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_ENABLE_OBJC_GC = unsupported;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -200,6 +209,7 @@
 				INFOPLIST_FILE = Info.plist;
 				LD_DYLIB_INSTALL_NAME = "@executable_path/../Frameworks/InputManager.framework/Versions/Current/InputManager";
 				PRODUCT_NAME = InputManager;
+				SDKROOT = macosx;
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Debug;
@@ -208,6 +218,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -218,6 +230,7 @@
 				INFOPLIST_FILE = Info.plist;
 				LD_DYLIB_INSTALL_NAME = "@executable_path/../Frameworks/InputManager.framework/Versions/Current/InputManager";
 				PRODUCT_NAME = InputManager;
+				SDKROOT = macosx;
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Release;

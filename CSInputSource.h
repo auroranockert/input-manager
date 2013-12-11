@@ -19,7 +19,7 @@
 + (CSInputSource *) currentKeyboard;
 + (CSInputSource *) currentKeyboardLayout;
 
-- (void *) getProperty: (NSString *) key;
+- (void *) getProperty: (CFStringRef) key;
 - (NSString *) localizedName;
 
 - (NSError *) select;
